@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Contacts from './Contacts';
+import Form from './Form';
 
 // import contacts from '../../data/contacts';
 const contacts = [
@@ -22,10 +23,15 @@ class App extends Component {
     );
   };
 
+  addNewContact = (newContact) => {
+    this.setState(({contacts}) => ({contacts: [...contacts, newContact]}));
+  }
+
   render() {
     return (
       <>
         <h1>Phonebook</h1>
+        <Form addNewContact={this.addNewContact}/>
         <Contacts contacts={this.state.contacts} onClick={this.deleteContact} />
       </>
     );
