@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Contacts from './Contacts';
 import Form from './Form';
+import Filter from './Filter';
 
 // import contacts from '../../data/contacts';
 const contacts = [
@@ -18,21 +19,32 @@ class App extends Component {
   };
 
   deleteContact = id => {
-    this.setState(prevState => 
-      ({contacts: prevState.contacts.filter(contact => contact.id !== id)})
-    );
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
   };
 
-  addNewContact = (newContact) => {
-    this.setState(({contacts}) => ({contacts: [...contacts, newContact]}));
-  }
+  addNewContact = newContact => {
+    this.setState(({ contacts }) => ({ contacts: [...contacts, newContact] }));
+  };
+
+  ChangeFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
+  };
 
   render() {
+    const { filter, contacts } = this.state;
+    const { addNewContact, ChangeFilter, deleteContact } = this;
+
+    const normalizedFilter = filter.toLowerCase();
+    const visibleContacts = contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
+
     return (
       <>
         <h1>Phonebook</h1>
-        <Form addNewContact={this.addNewContact}/>
-        <Contacts contacts={this.state.contacts} onClick={this.deleteContact} />
+        <Form addNewContact={addNewContact} />
+        <Filter value={filter} onChange={ChangeFilter} />
+        <Contacts contacts={visibleContacts} onClick={deleteContact} />
       </>
     );
   }
